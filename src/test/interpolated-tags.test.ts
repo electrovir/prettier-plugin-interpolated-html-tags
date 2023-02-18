@@ -158,103 +158,133 @@ const tagTests: InterpolatedTagTest[] = [
         it: 'formats lots of interpolations',
         code: `
             html\`
-                <div class=\${interpolation1}></div>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <!-- this should format properly still 1. -->
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <!-- this should format properly still 2. -->
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}><!-- this should format properly still 3. -->
-
-                <!-- this should format properly still 4. -->
-            \`;
-        `,
-        expect: `
-            html\`
-                <div class=\${interpolation1}></div>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <!-- this should format properly still 1. -->
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <!-- this should format properly still 2. -->
-                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
-                <!-- this should format properly still 3. -->
-
-                <!-- this should format properly still 4. -->
+                <main
+                    \${onResize((entry) => {
+                        updateState({width: entry.contentRect.width});
+                    })}
+                >
+                    <\${TestChildElement}
+                        \${assign(TestChildElement, {
+                            displayNumber: state.funnyNumber,
+                            width: state.width,
+                        })}
+                        \${listen(TestChildElement.events.speak, (event) => {
+                            updateState({
+                                eventsReceived: state.eventsReceived + 1,
+                                lastReceivedMessage: event.detail,
+                            });
+                        })}
+                        \${listen(MyCustomEvent, (event) => {
+                            console.debug(event.detail);
+                        })}
+                        \${listen('click', (event) => {
+                            console.debug(
+                                'event should be a mouse event:',
+                                // should be true
+                                event instanceof MouseEvent,
+                                event,
+                            );
+                        })}
+                    ></\${TestChildElement}>
+                    <\${TestChildElement}
+                        \${assign(TestChildElement, {
+                            displayNumber: state.funnyNumber,
+                            width: state.width,
+                        })}
+                        \${listen(TestChildElement.events.speak, (event) => {
+                            updateState({
+                                eventsReceived: state.eventsReceived + 1,
+                                lastReceivedMessage: event.detail,
+                            });
+                        })}
+                        \${listen(MyCustomEvent, (event) => {
+                            console.debug(event.detail);
+                        })}
+                        \${listen('click', (event) => {
+                            console.debug(
+                                'event should be a mouse event:',
+                                // should be true
+                                event instanceof MouseEvent,
+                                event,
+                            );
+                        })}
+                    ></\${TestChildElement}>
+                    <\${TestChildElement}
+                        \${assign(TestChildElement, {
+                            displayNumber: state.funnyNumber,
+                            width: state.width,
+                        })}
+                        \${listen(TestChildElement.events.speak, (event) => {
+                            updateState({
+                                eventsReceived: state.eventsReceived + 1,
+                                lastReceivedMessage: event.detail,
+                            });
+                        })}
+                        \${listen(MyCustomEvent, (event) => {
+                            console.debug(event.detail);
+                        })}
+                        \${listen('click', (event) => {
+                            console.debug(
+                                'event should be a mouse event:',
+                                // should be true
+                                event instanceof MouseEvent,
+                                event,
+                            );
+                        })}
+                    ></\${TestChildElement}>
+                    <\${TestChildElement}
+                        \${assign(TestChildElement, {
+                            displayNumber: state.funnyNumber,
+                            width: state.width,
+                        })}
+                        \${listen(TestChildElement.events.speak, (event) => {
+                            updateState({
+                                eventsReceived: state.eventsReceived + 1,
+                                lastReceivedMessage: event.detail,
+                            });
+                        })}
+                        \${listen(MyCustomEvent, (event) => {
+                            console.debug(event.detail);
+                        })}
+                        \${listen('click', (event) => {
+                            console.debug(
+                                'event should be a mouse event:',
+                                // should be true
+                                event instanceof MouseEvent,
+                                event,
+                            );
+                        })}
+                    ></\${TestChildElement}>
+                    <\${TestChildElement}
+                        \${assign(TestChildElement, {
+                            displayNumber: state.funnyNumber,
+                            width: state.width,
+                        })}
+                        \${listen(TestChildElement.events.speak, (event) => {
+                            updateState({
+                                eventsReceived: state.eventsReceived + 1,
+                                lastReceivedMessage: event.detail,
+                            });
+                        })}
+                        \${listen(MyCustomEvent, (event) => {
+                            console.debug(event.detail);
+                        })}
+                        \${listen('click', (event) => {
+                            console.debug(
+                                'event should be a mouse event:',
+                                // should be true
+                                event instanceof MouseEvent,
+                                event,
+                            );
+                        })}
+                    ></\${TestChildElement}>
+                    Welcome to the test app.
+                    <button \${listen('click', () => updateState({funnyNumber: Math.random()}))}>
+                        assign NEW number to child
+                    </button>
+                    <!-- Verify that the child component does not rerender when we pass it the same value. -->
+                    <!-- Check the console logs to verify.-->
+                </main>
             \`;
         `,
     },
