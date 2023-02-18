@@ -4,9 +4,7 @@ type TagType = 'close' | 'open';
 
 const replacementMap = new Map<ReplacementKey, Record<TagType, string>>();
 
-/**
- * @deprecated this should only be used in debugging
- */
+/** @deprecated This should only be used in debugging */
 export function debugGetMap(): void {
     return replacementMap as any;
 }

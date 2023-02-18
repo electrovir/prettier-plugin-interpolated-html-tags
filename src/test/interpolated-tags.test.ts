@@ -128,7 +128,7 @@ const tagTests: InterpolatedTagTest[] = [
                     
                     
             </\${ChildElement}>
-        <!-- Verify that the child component does not rerender when we pass it the same value. -->
+        <!-- test comment test comment test comment test comment test comment. -->
                 <div>\${'interpolation'}</div>
                 
         
@@ -138,10 +138,123 @@ const tagTests: InterpolatedTagTest[] = [
         expect: `
             html\`
                 <\${ChildElement}></\${ChildElement}>
-                <!-- Verify that the child component does not rerender when we pass it the same value. -->
+                <!-- test comment test comment test comment test comment test comment. -->
                 <div>\${'interpolation'}</div>
 
                 <\${ChildElement}></\${ChildElement}>
+            \`;
+        `,
+    },
+    {
+        it: 'does not require quotes around attributes',
+        code: `
+            html\`
+                <div class=\${interpolation1}></div>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+            \`;
+        `,
+    },
+    {
+        it: 'formats lots of interpolations',
+        code: `
+            html\`
+                <div class=\${interpolation1}></div>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <!-- this should format properly still 1. -->
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <!-- this should format properly still 2. -->
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}><!-- this should format properly still 3. -->
+
+                <!-- this should format properly still 4. -->
+            \`;
+        `,
+        expect: `
+            html\`
+                <div class=\${interpolation1}></div>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <!-- this should format properly still 1. -->
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <!-- this should format properly still 2. -->
+                <\${ChildElement} style=\${interpolation1}>></\${ChildElement}>
+                <!-- this should format properly still 3. -->
+
+                <!-- this should format properly still 4. -->
             \`;
         `,
     },
