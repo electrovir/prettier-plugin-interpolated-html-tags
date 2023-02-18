@@ -1,15 +1,15 @@
 import {Parser, ParserOptions, Plugin, Printer} from 'prettier';
-import {pluginMarker} from './plugin-marker';
-import {injectCustomParse} from './preprocessing/inject-parse';
-import {makeCustomPrinter} from './printer/multiline-array-printer';
-import {setOriginalPrinter} from './printer/original-printer';
+import {pluginMarker} from '../plugin-marker';
+import {createInterpolatedTagNamesPrinter} from '../printer/interpolated-tag-names-printer';
+import {setOriginalPrinter} from '../printer/original-printer';
+import {injectCustomHtmlParse} from './inject-parse';
 
-function addMultilinePrinter(options: ParserOptions): void {
+function injectInterpolatedHtmlTagsPrinter(options: ParserOptions): void {
     if ('printer' in options) {
         const originalPrinter = (options as any as {printer: Printer}).printer;
         setOriginalPrinter((options as unknown as {astFormat: string}).astFormat, originalPrinter);
         // overwrite the printer with ours
-        (options as any as {printer: Printer}).printer = makeCustomPrinter(
+        (options as any as {printer: Printer}).printer = createInterpolatedTagNamesPrinter(
             (options as unknown as {astFormat: string}).astFormat,
         );
     } else {
@@ -58,8 +58,8 @@ function findPluginsByParserName(parserName: string, options: ParserOptions): Pl
     });
 }
 
-export function addCustomPreprocessing(originalParser: Parser, parserName: string) {
-    const thisPluginPreprocess = (text: string, options: ParserOptions) => {
+export function injectCustomPreprocessing(originalParser: Parser, parserName: string) {
+    function interpolatedHtmlTagsPreProcess(text: string, options: ParserOptions) {
         const pluginsWithPreprocessor = findPluginsByParserName(parserName, options).filter(
             (plugin) => !!plugin.parsers?.[parserName]?.preprocess,
         );
@@ -80,17 +80,14 @@ export function addCustomPreprocessing(originalParser: Parser, parserName: strin
                 processedText = nextText;
             }
         });
-        if ((options as unknown as {astFormat: string}).astFormat.toLowerCase() === 'html') {
-            // debugger;
-        }
-        addMultilinePrinter(options);
+        injectInterpolatedHtmlTagsPrinter(options);
 
         return processedText;
-    };
+    }
 
     const parser = {
-        ...injectCustomParse(originalParser, parserName),
-        preprocess: thisPluginPreprocess,
+        ...injectCustomHtmlParse(originalParser),
+        preprocess: interpolatedHtmlTagsPreProcess,
     };
 
     return parser;

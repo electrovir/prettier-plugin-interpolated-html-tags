@@ -1,1 +1,1 @@
-export const envDebugKey = 'NEW_LINE_DEBUG';
+export const envDebugKey = 'HTML_TAGS_DEBUG';

@@ -1,6 +1,6 @@
-import {AstPath, Doc, ParserOptions} from 'prettier';
+import {AstPath, Doc} from 'prettier';
 import {clearReplacements, getReplacement, ReplacementKey} from '../replacement-map';
-import {walkDoc} from './child-docs';
+import {walkDoc} from './walk-doc';
 
 type SpanLocation = {
     file: {content: string; url: string};
@@ -85,10 +85,9 @@ type HtmlChildNode = HtmlTextNode | HtmlAttributeNode | HtmlElementNode;
 
 type HtmlNode = HtmlTextNode | HtmlAttributeNode | HtmlElementNode | HtmlRootNode;
 
-export function doCrazyHtmlStuff(
+export function replaceHtmlTagPlaceholders(
     originalFormattedOutput: Doc,
     path: AstPath,
-    inputOptions: ParserOptions,
     debug: boolean,
 ) {
     const node = path.getValue() as HtmlNode;
@@ -98,9 +97,7 @@ export function doCrazyHtmlStuff(
             walkDoc(originalFormattedOutput, debug, (currentDoc, parentDocs, index) => {
                 const currentParent = parentDocs[0];
                 const parentDoc = currentParent?.parent;
-                // console.log({currentDoc});
                 if (typeof currentDoc === 'string') {
-                    // console.log({currentDoc});
                     if (currentDoc === `<${node.name}`) {
                         if (index == undefined) {
                             throw new Error(`Found opening tag but index is undefined`);

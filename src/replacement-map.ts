@@ -31,17 +31,7 @@ export function addReplacement(value: string, type: TagType, key?: ReplacementKe
 
 export function getReplacement(key: ReplacementKey, type: TagType): string | undefined {
     const value = replacementMap.get(key);
-
-    if (value == undefined) {
-        return undefined;
-    }
-
-    const typeValue = value[type];
-
-    if (value == undefined) {
-        return undefined;
-    }
-
+    const typeValue = value?.[type];
     return typeValue;
 }
 

@@ -1,8 +1,8 @@
 import {Node} from 'estree';
 import {AstPath, ParserOptions, Printer} from 'prettier';
 import {envDebugKey} from '../options';
-import {doCrazyHtmlStuff} from './html-crazy-stuff';
 import {getOriginalPrinter} from './original-printer';
+import {replaceHtmlTagPlaceholders} from './replace-html-tag-placeholders';
 
 const debug = !!process.env[envDebugKey];
 
@@ -13,9 +13,6 @@ function wrapInOriginalPrinterCall<T extends string = string>(
 ) {
     return (...args: any[]) => {
         const options = args[1] as ParserOptions;
-        // if ((options as unknown as {astFormat: string})?.astFormat.toLowerCase() === 'html') {
-        //     debugger;
-        //     }
         const originalPrinter = getOriginalPrinter(astFormat);
         if (property === 'print') {
             const path = args[0] as AstPath;
@@ -38,7 +35,7 @@ function wrapInOriginalPrinterCall<T extends string = string>(
             }
 
             if (astFormat === 'html') {
-                return doCrazyHtmlStuff(originalOutput, path, options, debug);
+                return replaceHtmlTagPlaceholders(originalOutput, path, debug);
             } else {
                 return originalOutput;
             }
@@ -60,15 +57,6 @@ function wrapInOriginalPrinterCall<T extends string = string>(
                 printerProp = (printerProp as any)[subProperty];
             }
             try {
-                // let isHtml= false;
-                // try{
-                //     isHtml = path.match((node)=>node.type === "TemplateLiteral", (node,name)=>node.type === "TaggedTemplateExpression" && node.tag.type === "Identifier" && node.tag.name === "html" && name === "quasi");
-                // } catch (error) {}
-                // const result = (printerProp as Function | undefined)?.apply(thisParent, args);
-                // if(isHtml) {
-                //     debugger;
-                // }
-                // return result;
                 return (printerProp as Function | undefined)?.apply(thisParent, args);
             } catch (error) {
                 const newError = new Error(
@@ -85,7 +73,7 @@ function wrapInOriginalPrinterCall<T extends string = string>(
     };
 }
 
-export function makeCustomPrinter(ast: string) {
+export function createInterpolatedTagNamesPrinter(ast: string) {
     const handleComments: Printer['handleComments'] = {
         // the avoidAstMutation property is not defined in the types
         // @ts-expect-error

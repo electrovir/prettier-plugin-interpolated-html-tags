@@ -16,6 +16,26 @@ const htmlTests: InterpolatedTagTest[] = [
         `,
     },
     {
+        name: 'does not interfere with array formatting',
+        code: `
+            const myArray = [1,2,3,4,5];
+            html\`<div class="hello">
+                        </div>\`
+        `,
+        expected: `
+            const myArray = [
+                1,
+                2,
+                3,
+                4,
+                5,
+            ];
+            html\`
+                <div class="hello"></div>
+            \`;
+        `,
+    },
+    {
         name: 'basic html with non-tag interpolation',
         // prettier-ignore
         code: `

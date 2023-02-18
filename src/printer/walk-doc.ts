@@ -51,7 +51,10 @@ export function walkDoc(
                 innerDoc,
                 debug,
                 callback,
-                [{parent: startDoc, childIndexInThisParent: index}, ...parents],
+                [
+                    {parent: startDoc, childIndexInThisParent: index},
+                    ...parents,
+                ],
                 index,
             );
         });
@@ -63,7 +66,10 @@ export function walkDoc(
             startDoc.contents,
             debug,
             callback,
-            [{parent: startDoc, childIndexInThisParent: undefined}, ...parents],
+            [
+                {parent: startDoc, childIndexInThisParent: undefined},
+                ...parents,
+            ],
             undefined,
         );
     } else if ('parts' in startDoc) {
@@ -74,7 +80,10 @@ export function walkDoc(
             startDoc.parts,
             debug,
             callback,
-            [{parent: startDoc, childIndexInThisParent: undefined}, ...parents],
+            [
+                {parent: startDoc, childIndexInThisParent: undefined},
+                ...parents,
+            ],
             undefined,
         );
     }

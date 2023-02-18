@@ -20,7 +20,7 @@
     "scripts": {
         "add-package": "npm run compile && rm -rf node_modules/prettier-plugin-interpolated-html-tags && cp -r dist node_modules/prettier-plugin-interpolated-html-tags",
         "compile": "rm -rf dist && virmator compile",
-        "debug": "cross-env NEW_LINE_DEBUG=true npm run test",
+        "debug": "cross-env HTML_TAGS_DEBUG=true npm run test",
         "docs:update": "virmator code-in-markdown",
         "format": "npm run add-package && virmator format",
         "publish": "virmator publish \"npm run compile && npm run test:all\"",
@@ -30,7 +30,8 @@
         "test:docs": "virmator code-in-markdown check",
         "test:format": "npm run add-package && virmator format check",
         "test:spelling": "virmator spellcheck",
-        "test:types": "tsc --noEmit"
+        "test:types": "tsc --noEmit",
+        "test:watch": "nodemon -V -w src -e ts --exec \"npm run test\""
     },
     "dependencies": {
         "@augment-vir/common": "^12.10.0",
@@ -43,15 +44,16 @@
         "@types/chai": "^4.3.4",
         "@types/esprima": "^4.0.3",
         "@types/mocha": "^10.0.1",
-        "@types/node": "^18.13.0",
+        "@types/node": "^18.14.0",
         "@types/prettier": "^2.7.2",
         "chai": "^4.3.7",
-        "cspell": "^6.25.0",
+        "cspell": "^6.26.3",
         "element-vir": "^9.2.0",
         "istanbul-smart-text-reporter": "^1.1.1",
         "markdown-code-example-inserter": "^0.3.0",
         "mocha": "^10.2.0",
         "mocha-spec-reporter-with-file-names": "^0.0.3",
+        "nodemon": "^2.0.20",
         "prettier": "^2.8.4",
         "prettier-plugin-jsdoc": "^0.4.2",
         "prettier-plugin-multiline-arrays": "^1.1.3",
