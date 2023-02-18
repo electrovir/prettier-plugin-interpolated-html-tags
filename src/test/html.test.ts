@@ -32,10 +32,18 @@ const htmlTests: InterpolatedTagTest[] = [
         name: 'with simple interpolated tag name',
         // prettier-ignore
         code: `
-                html\`<\${ChildElement}></\${ChildElement}>\`
+                html\`                  <\${ChildElement}
+                
+                       >
+                       
+                       
+                       
+                       </\${ChildElement}>\`
             `,
         expected: `
-                html\`<\${ChildElement}></\${ChildElement}>\`;
+            html\`
+                <\${ChildElement}></\${ChildElement}>
+            \`;
             `,
     },
     {
@@ -66,19 +74,19 @@ const htmlTests: InterpolatedTagTest[] = [
     },
     {
         name: 'with interpolated tag name',
-        force: true,
         // prettier-ignore
         code: `
-                <\${ChildElement}
+                html\`<\${ChildElement}
                 \${assign(ChildElement, {
                     inputExamples: 4,
                     someMore: 'hello',
                 })}
 
     ><span>
-            some children in here too</span></\${ChildElement}>
+            some children in here too</span></\${ChildElement}>\`
             `,
         expected: `
+            html\`
                 <\${ChildElement}
                     \${assign(ChildElement, {
                         inputExamples: 4,
@@ -87,6 +95,7 @@ const htmlTests: InterpolatedTagTest[] = [
                 >
                     <span>some children in here too</span>
                 </\${ChildElement}>
+            \`;
             `,
     },
 ];
@@ -97,17 +106,17 @@ describe('html interpolated tag names formatting', () => {
 
 describe('TS html formatting', () => {
     runTests('.ts', [
-    {
-        name: 'interpolation in html tagged template',
-        // prettier-ignore
-        code: `
+        {
+            name: 'interpolation in html tagged template',
+            // prettier-ignore
+            code: `
             html\`<div \${assign(ChildElement, {
                         inputExamples: 4,
                         someMore: 'hello',
                     })}class="hello">
                         </div>\`
         `,
-        expected: `
+            expected: `
             html\`
                 <div
                     \${assign(ChildElement, {
@@ -117,5 +126,6 @@ describe('TS html formatting', () => {
                 ></div>
             \`;
         `,
-    },]);
+        },
+    ]);
 });
