@@ -1,7 +1,7 @@
 import {describe} from 'mocha';
 import {InterpolatedTagTest, runTests} from './run-tests';
 
-const htmlTests: InterpolatedTagTest[] = [
+const tagTests: InterpolatedTagTest[] = [
     {
         name: 'basic html with no interpolation',
         // prettier-ignore
@@ -120,32 +120,6 @@ const htmlTests: InterpolatedTagTest[] = [
     },
 ];
 
-describe('html interpolated tag names formatting', () => {
-    runTests('.ts', htmlTests);
-});
-
-describe('TS html formatting', () => {
-    runTests('.ts', [
-        {
-            name: 'interpolation in html tagged template',
-            // prettier-ignore
-            code: `
-            html\`<div \${assign(ChildElement, {
-                        inputExamples: 4,
-                        someMore: 'hello',
-                    })}class="hello">
-                        </div>\`
-        `,
-            expected: `
-            html\`
-                <div
-                    \${assign(ChildElement, {
-                        inputExamples: 4,
-                        someMore: 'hello',
-                    })}class="hello"
-                ></div>
-            \`;
-        `,
-        },
-    ]);
+describe('plugin correctly formats', () => {
+    runTests('.ts', tagTests);
 });

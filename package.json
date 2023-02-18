@@ -1,6 +1,6 @@
 {
     "name": "prettier-plugin-interpolated-html-tags",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "homepage": "https://github.com/electrovir/prettier-plugin-interpolated-html-tags",
     "bugs": {
         "url": "https://github.com/electrovir/prettier-plugin-interpolated-html-tags/issues"

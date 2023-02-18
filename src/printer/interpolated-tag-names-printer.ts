@@ -34,21 +34,7 @@ function wrapInOriginalPrinterCall<T extends string = string>(
                 return originalOutput;
             }
 
-            if (astFormat === 'html') {
-                return replaceHtmlTagPlaceholders(originalOutput, path, debug);
-            } else {
-                return originalOutput;
-            }
-        } else if (property === 'embed') {
-            const originalOutput = originalPrinter.embed!.call(
-                originalPrinter,
-                args[0],
-                args[1],
-                args[2],
-                args[3],
-            );
-
-            return originalOutput;
+            return replaceHtmlTagPlaceholders(originalOutput, path, debug);
         } else {
             let thisParent: any = originalPrinter;
             let printerProp = originalPrinter[property];
