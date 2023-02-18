@@ -39,6 +39,4 @@ const prettierConfig = {
     ],
 };
 
-console.log(prettierConfig.plugins);
-
 module.exports = prettierConfig;

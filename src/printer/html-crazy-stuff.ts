@@ -98,9 +98,9 @@ export function doCrazyHtmlStuff(
             walkDoc(originalFormattedOutput, debug, (currentDoc, parentDocs, index) => {
                 const currentParent = parentDocs[0];
                 const parentDoc = currentParent?.parent;
-                console.log({currentDoc});
+                // console.log({currentDoc});
                 if (typeof currentDoc === 'string') {
-                    console.log({currentDoc});
+                    // console.log({currentDoc});
                     if (currentDoc === `<${node.name}`) {
                         if (index == undefined) {
                             throw new Error(`Found opening tag but index is undefined`);

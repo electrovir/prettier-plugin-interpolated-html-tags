@@ -1,5 +1,6 @@
 {
     "name": "prettier-plugin-interpolated-html-tags",
+    "version": "0.0.0",
     "homepage": "https://github.com/electrovir/prettier-plugin-interpolated-html-tags",
     "bugs": {
         "url": "https://github.com/electrovir/prettier-plugin-interpolated-html-tags/issues"
@@ -17,16 +18,17 @@
     "types": "dist/index.d.ts",
     "bin": "dist/index.js",
     "scripts": {
+        "add-package": "npm run compile && rm -rf node_modules/prettier-plugin-interpolated-html-tags && cp -r dist node_modules/prettier-plugin-interpolated-html-tags",
         "compile": "rm -rf dist && virmator compile",
         "debug": "cross-env NEW_LINE_DEBUG=true npm run test",
         "docs:update": "virmator code-in-markdown",
-        "format": "virmator format",
+        "format": "npm run add-package && virmator format",
         "publish": "virmator publish \"npm run compile && npm run test:all\"",
-        "test": "npm run compile && rm -rf node_modules/prettier-plugin-interpolated-html-tags && cp -r dist node_modules/prettier-plugin-interpolated-html-tags && virmator test",
+        "test": "npm run add-package && virmator test",
         "test:all": "npm run test:types && npm run test:coverage && npm run test:spelling && npm run test:format && npm run test:docs",
         "test:coverage": "npm run test coverage",
         "test:docs": "virmator code-in-markdown check",
-        "test:format": "virmator format check",
+        "test:format": "npm run add-package && virmator format check",
         "test:spelling": "virmator spellcheck",
         "test:types": "tsc --noEmit"
     },
@@ -44,8 +46,10 @@
         "@types/node": "^18.13.0",
         "@types/prettier": "^2.7.2",
         "chai": "^4.3.7",
+        "cspell": "^6.25.0",
         "element-vir": "^9.2.0",
         "istanbul-smart-text-reporter": "^1.1.1",
+        "markdown-code-example-inserter": "^0.3.0",
         "mocha": "^10.2.0",
         "mocha-spec-reporter-with-file-names": "^0.0.3",
         "prettier": "^2.8.4",

@@ -8,14 +8,14 @@ export function injectCustomParse(originalParser: Parser, parserName: string) {
         parsers: Record<string, Parser>,
         options: ParserOptions,
     ) {
-        console.log({parserName, text});
+        // console.log({parserName, text});
         let fixedText: string | undefined;
         if (parserName === 'html') {
             // debugger;
             // fixedText = '<derp PRETTIER_HTML_PLACEHOLDER_0_0_IN_JS\n    PRETTIER_HTML_PLACEHOLDER_1_0_IN_JS\n\n    ><span>\nsome children in here too</span></derp> PRETTIER_HTML_PLACEHOLDER_2_0_IN_JS'
-            console.log('starting');
+            // console.log('starting');
             fixedText = replaceTagNames(text);
-            console.log({fixedText});
+            // console.log({fixedText});
         }
         // const fixedText = fixInterpolatedHtmlTags(text);
         // console.log({fixedText});
@@ -53,14 +53,14 @@ export function replaceTagNames(text: string): string {
                                 `failed to extract the full prettier placeholder at index '${findingLetterIndex}' from: ${text}`,
                             );
                         }
-                        console.log({placeholder});
+                        // console.log({placeholder});
                         const replacementTagName = addReplacement(placeholder, 'open');
                         modifiedText = modifiedText.replace(placeholder, replacementTagName);
                         const closingTagPlaceholder = findClosingPlaceholder(
                             modifiedText,
                             findingLetterIndex,
                         );
-                        console.log({closingTagPlaceholder});
+                        // console.log({closingTagPlaceholder});
                         if (closingTagPlaceholder) {
                             addReplacement(closingTagPlaceholder, 'close', replacementTagName);
                             modifiedText = modifiedText.replace(
@@ -69,7 +69,7 @@ export function replaceTagNames(text: string): string {
                             );
                         }
                     }
-                    console.log({findingLetterLetter});
+                    // console.log({findingLetterLetter});
                     break;
                 }
             }
@@ -98,7 +98,7 @@ function findClosingPlaceholder(text: string, startIndex: number): string {
     }
 
     const sliced = text.slice(index + 2);
-    console.log({sliced});
+    // console.log({sliced});
     if (sliced.startsWith('PRETTIER_HTML_PLACEHOLDER_')) {
         const closingPlaceholder = safeMatch(sliced, /PRETTIER\w+\d+\w+\d+\w+?_JS/)[0];
         if (!closingPlaceholder) {
@@ -106,7 +106,7 @@ function findClosingPlaceholder(text: string, startIndex: number): string {
                 `failed to extract the full prettier closing placeholder at index '${index}' from: ${text}`,
             );
         }
-        console.log({closingPlaceholder});
+        // console.log({closingPlaceholder});
         return closingPlaceholder;
     } else {
         return '';
