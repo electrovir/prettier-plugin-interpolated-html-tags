@@ -85,16 +85,13 @@ type HtmlChildNode = HtmlTextNode | HtmlAttributeNode | HtmlElementNode;
 
 type HtmlNode = HtmlTextNode | HtmlAttributeNode | HtmlElementNode | HtmlRootNode;
 
-export function replaceHtmlTagPlaceholders(
-    originalFormattedOutput: Doc,
-    path: AstPath,
-    debug: boolean,
-) {
+export function replaceHtmlTagPlaceholders(originalFormattedOutput: Doc, path: AstPath) {
     const node = path.getValue() as HtmlNode;
+
     if (node.type === 'element') {
         const replacementOpeningTagName = getReplacement(node.name as ReplacementKey, 'open');
         if (replacementOpeningTagName) {
-            walkDoc(originalFormattedOutput, debug, (currentDoc, parentDocs, index) => {
+            walkDoc(originalFormattedOutput, (currentDoc, parentDocs, index) => {
                 const currentParent = parentDocs[0];
                 const parentDoc = currentParent?.parent;
                 if (typeof currentDoc === 'string') {
@@ -120,12 +117,12 @@ export function replaceHtmlTagPlaceholders(
                         }
                         parentDoc[index] = `</${replacementClosingTagName}` as any;
                         clearReplacements(node.name as ReplacementKey);
-                        debugger;
                     }
                 }
                 return true;
             });
         }
     }
+
     return originalFormattedOutput;
 }

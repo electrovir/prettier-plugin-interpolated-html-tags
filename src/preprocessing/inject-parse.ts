@@ -1,5 +1,6 @@
 import {safeMatch} from '@augment-vir/common';
 import {Parser, ParserOptions} from 'prettier';
+import {debugLog} from '../debug';
 import {addReplacement} from '../replacement-map';
 
 export function injectCustomHtmlParse(originalParser: Parser) {
@@ -9,7 +10,9 @@ export function injectCustomHtmlParse(originalParser: Parser) {
         options: ParserOptions,
     ) {
         const fixedText = replaceTagNames(text);
-        const originalOutput = originalParser.parse(fixedText || text, parsers, options);
+        debugLog({fixedText});
+        debugger;
+        const originalOutput = originalParser.parse(fixedText, parsers, options);
         return originalOutput;
     }
 
@@ -25,7 +28,8 @@ export function replaceTagNames(text: string): string {
     let modifiedText = text;
     for (let index = text.length; index >= 0; index--) {
         const letter = text[index];
-        if (letter === '<') {
+        const topSlice = text.slice(index);
+        if (letter === '<' && !topSlice.startsWith('<!--')) {
             let findingLetterIndex = index + 1;
             for (; findingLetterIndex < text.length; findingLetterIndex++) {
                 const findingLetterLetter = text[findingLetterIndex];
@@ -70,11 +74,13 @@ function findClosingPlaceholder(text: string, startIndex: number): string {
     let nested = 0;
     for (; index < text.length; index++) {
         const letter = text[index];
-        if (letter === '<' && text[index + 1] !== '/') {
+        const nextLetter = text[index + 1];
+        const previousLetter = text[index - 1];
+        if (letter === '<' && nextLetter !== '/') {
             nested++;
-        } else if (letter === '>' && text[index - 1] === '/') {
+        } else if (letter === '>' && previousLetter === '/') {
             nested--;
-        } else if (letter === '<' && text[index + 1] === '/') {
+        } else if (letter === '<' && nextLetter === '/') {
             if (nested) {
                 nested--;
             } else {

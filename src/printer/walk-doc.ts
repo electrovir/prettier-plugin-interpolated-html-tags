@@ -1,4 +1,5 @@
 import {Doc} from 'prettier';
+import {isVerbose, verboseLog} from '../debug';
 
 type Parents = {parent: Doc; childIndexInThisParent: number | undefined};
 
@@ -9,7 +10,6 @@ type Parents = {parent: Doc; childIndexInThisParent: number | undefined};
 export function walkDoc(
     startDoc: Doc,
     /** Return something falsy to prevent walking of child docs */
-    debug: boolean,
     callback: (
         currentDoc: Doc,
         parents: Parents[],
@@ -21,7 +21,7 @@ export function walkDoc(
     if (!startDoc) {
         return true;
     }
-    if (debug) {
+    if (isVerbose) {
         const parent = parents[0];
         console.info({
             firingCallbackFor: startDoc,
@@ -42,48 +42,30 @@ export function walkDoc(
     if (typeof startDoc === 'string') {
         return true;
     } else if (Array.isArray(startDoc)) {
-        if (debug) {
-            console.info('walking array children');
-        }
+        verboseLog('walking array children');
         // one a child returns false, abort walking this array
         startDoc.every((innerDoc, index): boolean => {
             return walkDoc(
                 innerDoc,
-                debug,
                 callback,
-                [
-                    {parent: startDoc, childIndexInThisParent: index},
-                    ...parents,
-                ],
+                [{parent: startDoc, childIndexInThisParent: index}, ...parents],
                 index,
             );
         });
     } else if ('contents' in startDoc) {
-        if (debug) {
-            console.info('walking contents property');
-        }
+        verboseLog('walking contents property');
         return walkDoc(
             startDoc.contents,
-            debug,
             callback,
-            [
-                {parent: startDoc, childIndexInThisParent: undefined},
-                ...parents,
-            ],
+            [{parent: startDoc, childIndexInThisParent: undefined}, ...parents],
             undefined,
         );
     } else if ('parts' in startDoc) {
-        if (debug) {
-            console.info('walking parts property');
-        }
+        verboseLog('walking parts property');
         return walkDoc(
             startDoc.parts,
-            debug,
             callback,
-            [
-                {parent: startDoc, childIndexInThisParent: undefined},
-                ...parents,
-            ],
+            [{parent: startDoc, childIndexInThisParent: undefined}, ...parents],
             undefined,
         );
     }

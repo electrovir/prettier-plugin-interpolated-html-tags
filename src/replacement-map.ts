@@ -4,17 +4,25 @@ type TagType = 'close' | 'open';
 
 const replacementMap = new Map<ReplacementKey, Record<TagType, string>>();
 
-const replacementKeyPrefix = 'electrovir-prettier-interpolated-tags-' as const;
+/**
+ * @deprecated this should only be used in debugging
+ */
+export function debugGetMap(): void {
+    return replacementMap as any;
+}
 
-export type ReplacementKey = `${typeof replacementKeyPrefix}${string}`;
+const replacementPrefix = 't-' as const;
 
-function createKey(): ReplacementKey {
-    return `${replacementKeyPrefix}${randomString()}`;
+export type ReplacementKey = `${typeof replacementPrefix}${string}`;
+
+function createKey(length: number): ReplacementKey {
+    const randomSuffix = randomString(length - replacementPrefix.length);
+    return `${replacementPrefix}${randomSuffix}`;
 }
 
 export function addReplacement(value: string, type: TagType, key?: ReplacementKey) {
     if (!key) {
-        key = createKey();
+        key = createKey(value.length);
     }
     let storedRecord = replacementMap.get(key);
     if (!storedRecord) {

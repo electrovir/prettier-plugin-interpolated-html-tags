@@ -3,26 +3,26 @@ import {InterpolatedTagTest, runTests} from './run-tests';
 
 const tagTests: InterpolatedTagTest[] = [
     {
-        name: 'basic html with no interpolation',
+        it: 'formats basic html with no interpolation',
         // prettier-ignore
         code: `
             html\`<div class="hello">
                         </div>\`
         `,
-        expected: `
+        expect: `
             html\`
                 <div class="hello"></div>
             \`;
         `,
     },
     {
-        name: 'does not interfere with array formatting',
+        it: 'does not interfere with array formatting',
         code: `
             const myArray = [1,2,3,4,5];
             html\`<div class="hello">
                         </div>\`
         `,
-        expected: `
+        expect: `
             const myArray = [
                 1,
                 2,
@@ -36,20 +36,20 @@ const tagTests: InterpolatedTagTest[] = [
         `,
     },
     {
-        name: 'basic html with non-tag interpolation',
+        it: 'formats basic html with non-tag interpolation',
         // prettier-ignore
         code: `
             html\`<div class="hello">${'hi I like to eat food'}
                         </div>\`
         `,
-        expected: `
+        expect: `
             html\`
                 <div class="hello">${'hi I like to eat food'}</div>
             \`;
         `,
     },
     {
-        name: 'with simple interpolated tag name',
+        it: 'formats a simple interpolated tag name',
         // prettier-ignore
         code: `
                 html\`                  <\${ChildElement}
@@ -60,14 +60,14 @@ const tagTests: InterpolatedTagTest[] = [
                        
                        </\${ChildElement}>\`
             `,
-        expected: `
+        expect: `
             html\`
                 <\${ChildElement}></\${ChildElement}>
             \`;
             `,
     },
     {
-        name: 'directive without interpolated tag name',
+        it: 'formats a directive without interpolated tag name',
         // prettier-ignore
         code: `
                 html\`<div
@@ -79,7 +79,7 @@ const tagTests: InterpolatedTagTest[] = [
     ><span>
             some children in here too</span></div>\`
             `,
-        expected: `
+        expect: `
             html\`
                 <div
                     \${assign(ChildElement, {
@@ -93,7 +93,7 @@ const tagTests: InterpolatedTagTest[] = [
             `,
     },
     {
-        name: 'with interpolated tag name',
+        it: 'formats an element with interpolated tag name an directive',
         // prettier-ignore
         code: `
                 html\`<\${ChildElement}
@@ -105,7 +105,7 @@ const tagTests: InterpolatedTagTest[] = [
     ><span>
             some children in here too</span></\${ChildElement}>\`
             `,
-        expected: `
+        expect: `
             html\`
                 <\${ChildElement}
                     \${assign(ChildElement, {
@@ -117,6 +117,33 @@ const tagTests: InterpolatedTagTest[] = [
                 </\${ChildElement}>
             \`;
             `,
+    },
+    {
+        it: 'does not break on html comments',
+        code: `
+            html\`
+            
+                    <\${ChildElement}>
+                    
+                    
+                    
+            </\${ChildElement}>
+        <!-- Verify that the child component does not rerender when we pass it the same value. -->
+                <div>\${'interpolation'}</div>
+                
+        
+        <\${ChildElement}></\${ChildElement}>
+            \`
+        `,
+        expect: `
+            html\`
+                <\${ChildElement}></\${ChildElement}>
+                <!-- Verify that the child component does not rerender when we pass it the same value. -->
+                <div>\${'interpolation'}</div>
+
+                <\${ChildElement}></\${ChildElement}>
+            \`;
+        `,
     },
 ];
 
