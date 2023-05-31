@@ -1,5 +1,5 @@
 import {AstPath, Doc} from 'prettier';
-import {clearReplacements, getReplacement, ReplacementKey} from '../replacement-map';
+import {ReplacementKey, clearReplacements, getReplacement} from '../replacement-map';
 import {walkDoc} from './walk-doc';
 
 type SpanLocation = {

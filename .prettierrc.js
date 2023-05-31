@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const baseConfig = require('virmator/base-configs/base-prettierrc.js');
+const {basePrettierConfig} = require('virmator/base-configs/base-prettierrc.js');
 
 function toPosixPath(input) {
     return input.replace(/\\/g, '/').replace(/^\w+:/, '');
@@ -27,9 +27,9 @@ function findClosestPackagePath(dirPath, packageName) {
  * @type {PrettierOptions & MultilineOptions}
  */
 const prettierConfig = {
-    ...baseConfig,
+    ...basePrettierConfig,
     plugins: [
-        ...baseConfig.plugins,
+        ...basePrettierConfig.plugins,
         path.posix.resolve(
             posixDirname,
             toPosixPath(
