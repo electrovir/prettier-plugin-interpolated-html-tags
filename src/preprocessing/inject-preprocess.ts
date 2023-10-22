@@ -63,8 +63,6 @@ export function injectCustomPreprocessing(originalParser: Parser) {
     });
 
     function interpolatedHtmlTagsPreProcess(text: string, options: ActualParserOptions) {
-        debugger;
-
         injectInterpolatedHtmlTagsPrinter(options);
 
         return text;

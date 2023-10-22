@@ -53,37 +53,3 @@ export function createInterpolatedTagNamesPrinter() {
     });
     return printer;
 }
-
-// /** This is a proxy because the original printer is only set at run time. */
-// export const interpolatedTagNamesPrinter = new Proxy<Printer>({} as Printer, {
-//     get(target, property: keyof Printer) {
-//         debugger;
-
-//         if ((property as string) === 'then') {
-//             return undefined;
-//         }
-//         // the avoidAstMutation property is not defined in the types
-//         // @ts-expect-error
-//         else if (property === 'experimentalFeatures') {
-//             return {
-//                 avoidAstMutation: true,
-//             };
-//         } else if (property === 'handleComments') {
-//             /**
-//              * "handleComments" is the only printer property which isn't a callback function, so for
-//              * simplicity, ignore it.
-//              */
-//             return handleComments;
-//         }
-//         const originalPrinter = getOriginalPrinter();
-//         if (originalPrinter[property] === undefined) {
-//             return undefined;
-//         }
-
-//         /**
-//          * We have to return a callback so that we can extract the jsPlugin from the options
-//          * argument
-//          */
-//         return wrapInOriginalPrinterCall(property);
-//     },
-// });

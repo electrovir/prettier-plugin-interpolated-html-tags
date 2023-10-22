@@ -3,9 +3,8 @@ import {Printer} from 'prettier';
 let originalPrinter: Printer | undefined;
 
 export function setOriginalPrinter(input: Printer) {
-    debugger;
     if (originalPrinter) {
-        throw new Error('Tried to set original printer twice');
+        return;
     }
     originalPrinter = input;
 }
