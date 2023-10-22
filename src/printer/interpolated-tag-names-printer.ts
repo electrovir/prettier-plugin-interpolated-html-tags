@@ -1,18 +1,17 @@
-import {Node} from 'estree';
 import {AstPath, ParserOptions, Printer} from 'prettier';
 import {getOriginalPrinter} from './original-printer';
 import {replaceHtmlTagPlaceholders} from './replace-html-tag-placeholders';
 
 function wrapInOriginalPrinterCall<T extends string = string>(
-    astFormat: string,
     property: keyof Printer,
     subProperty?: T,
 ) {
     return (...args: any[]) => {
-        const options = args[1] as ParserOptions;
-        const originalPrinter = getOriginalPrinter(astFormat);
+        const originalPrinter = getOriginalPrinter();
+
         if (property === 'print') {
             const path = args[0] as AstPath;
+            const options = args[1] as ParserOptions;
             const originalOutput = originalPrinter.print.call(
                 originalPrinter,
                 path,
@@ -45,12 +44,46 @@ function wrapInOriginalPrinterCall<T extends string = string>(
     };
 }
 
-export function createInterpolatedTagNamesPrinter(ast: string) {
+export function createInterpolatedTagNamesPrinter() {
     /** This is a proxy because the original printer is only set at run time. */
     const printer = new Proxy<Printer<Node>>({} as Printer<Node>, {
         get: (target, property: keyof Printer) => {
-            return wrapInOriginalPrinterCall(ast, property);
+            return wrapInOriginalPrinterCall(property);
         },
     });
     return printer;
 }
+
+// /** This is a proxy because the original printer is only set at run time. */
+// export const interpolatedTagNamesPrinter = new Proxy<Printer>({} as Printer, {
+//     get(target, property: keyof Printer) {
+//         debugger;
+
+//         if ((property as string) === 'then') {
+//             return undefined;
+//         }
+//         // the avoidAstMutation property is not defined in the types
+//         // @ts-expect-error
+//         else if (property === 'experimentalFeatures') {
+//             return {
+//                 avoidAstMutation: true,
+//             };
+//         } else if (property === 'handleComments') {
+//             /**
+//              * "handleComments" is the only printer property which isn't a callback function, so for
+//              * simplicity, ignore it.
+//              */
+//             return handleComments;
+//         }
+//         const originalPrinter = getOriginalPrinter();
+//         if (originalPrinter[property] === undefined) {
+//             return undefined;
+//         }
+
+//         /**
+//          * We have to return a callback so that we can extract the jsPlugin from the options
+//          * argument
+//          */
+//         return wrapInOriginalPrinterCall(property);
+//     },
+// });

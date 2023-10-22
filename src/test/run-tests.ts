@@ -1,15 +1,15 @@
-import {removeColor} from '@augment-vir/common';
+import {createDeferredPromiseWrapper, removeColor} from '@augment-vir/common';
 import {assert} from 'chai';
 import {it} from 'mocha';
-import {format as prettierFormat, Options as PrettierOptions} from 'prettier';
+import {Options as PrettierOptions, format as prettierFormat} from 'prettier';
 import {repoConfig} from './prettier-config';
 
-function runPrettierFormat(
+async function runPrettierFormat(
     code: string,
     extension: string,
     options: Partial<PrettierOptions> = {},
     parser: string | undefined,
-): string {
+): Promise<string> {
     if (extension.startsWith('.')) {
         extension = extension.slice(1);
     }
@@ -22,7 +22,7 @@ function runPrettierFormat(
         }
     }) ?? ['.'];
 
-    return prettierFormat(code, {
+    return await prettierFormat(code, {
         filepath: `blah.${extension}`,
         ...repoConfig,
         ...options,
@@ -41,10 +41,6 @@ export type InterpolatedTagTest = {
     failureMessage?: string;
 };
 
-let forced = false;
-
-let allPassed = true;
-
 function removeIndent(input: string): string {
     return input
         .replace(/^\s*\n\s*/, '')
@@ -53,44 +49,55 @@ function removeIndent(input: string): string {
 }
 
 export function runTests(extension: string, tests: InterpolatedTagTest[], parser?: string) {
-    tests.forEach((test) => {
-        function testCallback() {
-            try {
-                const inputCode = removeIndent(test.code);
-                const expected = removeIndent(test.expect ?? test.code);
-                const formatted = runPrettierFormat(inputCode, extension, test.options, parser);
-                assert.strictEqual(formatted, expected);
-                if (formatted !== expected) {
-                    allPassed = false;
-                }
-            } catch (error) {
-                allPassed = false;
-                if (test.failureMessage && error instanceof Error) {
-                    const strippedMessage = removeColor(error.message);
-                    if (test.failureMessage !== strippedMessage) {
-                        console.info({strippedMessage});
+    let forced = false;
+
+    const passedTests: Promise<boolean[]> = Promise.all(
+        tests.map(async (test) => {
+            const deferredPromise = createDeferredPromiseWrapper<boolean>();
+
+            async function testCallback() {
+                try {
+                    const inputCode = removeIndent(test.code);
+                    const expected = removeIndent(test.expect ?? test.code);
+                    const formatted = await runPrettierFormat(
+                        inputCode,
+                        extension,
+                        test.options,
+                        parser,
+                    );
+                    assert.strictEqual(formatted, expected);
+                    deferredPromise.resolve(true);
+                } catch (error) {
+                    if (test.failureMessage && error instanceof Error) {
+                        deferredPromise.resolve(false);
+                        const strippedMessage = removeColor(error.message);
+                        if (test.failureMessage !== strippedMessage) {
+                            console.info({strippedMessage});
+                        }
+                        assert.strictEqual(removeColor(strippedMessage), test.failureMessage);
+                    } else {
+                        deferredPromise.reject(error);
                     }
-                    assert.strictEqual(removeColor(strippedMessage), test.failureMessage);
-                } else {
-                    throw error;
                 }
             }
-        }
 
-        if (test.force) {
-            forced = true;
-            it.only(test.it, () => {
-                testCallback();
-            });
-        } else if (test.exclude) {
-            it.skip(test.it, testCallback);
-        } else {
-            it(test.it, testCallback);
-        }
-    });
+            if (test.force) {
+                forced = true;
+                it.only(test.it, testCallback);
+            } else if (test.exclude) {
+                it.skip(test.it, testCallback);
+            } else {
+                it(test.it, testCallback);
+            }
+
+            return deferredPromise.promise;
+        }),
+    );
 
     if (forced) {
-        it.only('forced tests should not remain in the code', () => {
+        it.only('forced tests should not remain in the code', async () => {
+            const allPassed = (await passedTests).every((entry) => entry === true);
+
             if (allPassed) {
                 assert.strictEqual(forced, false);
             }

@@ -1,16 +1,18 @@
 import {Printer} from 'prettier';
 
-let originalPrinters: Record<string, Printer> = {};
+let originalPrinter: Printer | undefined;
 
-export function setOriginalPrinter(key: string, input: Printer) {
-    originalPrinters[key] = input;
+export function setOriginalPrinter(input: Printer) {
+    debugger;
+    if (originalPrinter) {
+        throw new Error('Tried to set original printer twice');
+    }
+    originalPrinter = input;
 }
 
-export function getOriginalPrinter(key: string): Printer {
-    const printer = originalPrinters[key];
-    if (!printer) {
-        debugger;
-        throw new Error(`originalPrinter with key '${key}' hasn't been defined yet!`);
+export function getOriginalPrinter(): Printer {
+    if (!originalPrinter) {
+        throw new Error(`originalPrinter hasn't been defined yet!`);
     }
-    return printer;
+    return originalPrinter;
 }

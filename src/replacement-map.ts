@@ -1,4 +1,4 @@
-import {randomString} from '@augment-vir/node-js';
+import {randomString} from '@augment-vir/common';
 
 type TagType = 'close' | 'open';
 

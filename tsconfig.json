@@ -1,13 +1,36 @@
 {
-    "extends": "./node_modules/virmator/base-configs/base-tsconfig.json",
     "compilerOptions": {
-        "outDir": "./dist",
-        "rootDir": "./src"
+        "alwaysStrict": true,
+        "baseUrl": ".",
+        "declaration": true,
+        "esModuleInterop": true,
+        "exactOptionalPropertyTypes": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUncheckedIndexedAccess": true,
+        "outDir": "dist",
+        "rootDir": "src",
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "ES2021",
+        "useUnknownInCatchVariables": true
     },
     "exclude": [
-        "./configs/",
-        "./dist/",
-        "./node_modules/",
-        "./test-files/"
-    ]
+        "configs",
+        "dist",
+        "node_modules",
+        "separate-configs",
+        "test-files"
+    ],
+    "ts-node": {
+        "compilerOptions": {
+            "module": "CommonJS"
+        }
+    }
 }
