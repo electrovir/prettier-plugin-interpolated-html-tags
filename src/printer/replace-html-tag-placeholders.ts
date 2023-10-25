@@ -1,4 +1,3 @@
-import {appendFileSync} from 'fs';
 import {AstPath, Doc} from 'prettier';
 import {ReplacementKey, clearReplacements, getReplacement} from '../replacement-map';
 import {walkDoc} from './walk-doc';
@@ -90,7 +89,6 @@ export function replaceHtmlTagPlaceholders(originalFormattedOutput: Doc, path: A
     const node = path.getNode() as HtmlNode;
 
     if (node.type === 'element') {
-        appendFileSync('/tmp/debug.txt', 'is type element');
         const replacementOpeningTagName = getReplacement(node.name as ReplacementKey, 'open');
         if (replacementOpeningTagName) {
             walkDoc(originalFormattedOutput, (currentDoc, parentDocs, index) => {
@@ -125,7 +123,6 @@ export function replaceHtmlTagPlaceholders(originalFormattedOutput: Doc, path: A
             });
         }
     }
-    appendFileSync('/tmp/debug.txt', 'not is type element');
 
     return originalFormattedOutput;
 }
