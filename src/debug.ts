@@ -1,7 +1,6 @@
 const envDebugKey = 'HTML_TAGS_DEBUG';
 
 export const isDebug = !!process.env[envDebugKey];
-// export const isDebug = true;
 
 export function debugLog(...args: any[]) {
     if (isDebug) {
@@ -9,7 +8,7 @@ export function debugLog(...args: any[]) {
     }
 }
 
-export const isVerbose = false;
+export const isVerbose = false as boolean;
 
 export function verboseLog(...args: any[]) {
     if (isVerbose) {

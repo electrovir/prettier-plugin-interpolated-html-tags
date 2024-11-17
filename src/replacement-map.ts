@@ -9,7 +9,7 @@ export function debugGetMap(): void {
     return replacementMap as any;
 }
 
-const replacementPrefix = 't-' as const;
+const replacementPrefix = 't-';
 
 export type ReplacementKey = `${typeof replacementPrefix}${string}`;
 

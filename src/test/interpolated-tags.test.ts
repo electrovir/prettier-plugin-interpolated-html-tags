@@ -1,10 +1,10 @@
-import {describe} from 'mocha';
-import {InterpolatedTagTest, runTests} from './run-tests';
+import {omitObjectKeys} from '@augment-vir/common';
+import {describe, itCases} from '@augment-vir/test';
+import {testFormat, type TestCase} from './run-tests.mock.js';
 
-const tagTests: InterpolatedTagTest[] = [
+const testCases: ({it: string; only?: true} & TestCase)[] = [
     {
         it: 'formats basic html with no interpolation',
-        // prettier-ignore
         code: `
             html\`<div class="hello">
                         </div>\`
@@ -37,20 +37,18 @@ const tagTests: InterpolatedTagTest[] = [
     },
     {
         it: 'formats basic html with non-tag interpolation',
-        // prettier-ignore
         code: `
-            html\`<div class="hello">${'hi I like to eat food'}
+            html\`<div class="hello">hi I like to eat food
                         </div>\`
         `,
         expect: `
             html\`
-                <div class="hello">${'hi I like to eat food'}</div>
+                <div class="hello">hi I like to eat food</div>
             \`;
         `,
     },
     {
         it: 'formats a simple interpolated tag name',
-        // prettier-ignore
         code: `
                 html\`                  <\${ChildElement}
                 
@@ -68,7 +66,6 @@ const tagTests: InterpolatedTagTest[] = [
     },
     {
         it: 'formats a directive without interpolated tag name',
-        // prettier-ignore
         code: `
                 html\`<div
                 \${assign(ChildElement, {
@@ -94,7 +91,6 @@ const tagTests: InterpolatedTagTest[] = [
     },
     {
         it: 'formats an element with interpolated tag name an directive',
-        // prettier-ignore
         code: `
                 html\`<\${ChildElement}
                 \${assign(ChildElement, {
@@ -291,5 +287,14 @@ const tagTests: InterpolatedTagTest[] = [
 ];
 
 describe('plugin correctly formats', () => {
-    runTests('.ts', tagTests);
+    itCases(
+        testFormat,
+        testCases.map((testCase) => {
+            return {
+                ...omitObjectKeys(testCase, ['expect']),
+                input: testCase,
+                throws: undefined,
+            };
+        }),
+    );
 });

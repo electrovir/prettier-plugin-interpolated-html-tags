@@ -1,5 +1,5 @@
 import {safeMatch} from '@augment-vir/common';
-import {addReplacement} from '../replacement-map';
+import {addReplacement} from '../replacement-map.js';
 
 export function replaceTagNames(text: string): string {
     let modifiedText = text;
@@ -14,10 +14,10 @@ export function replaceTagNames(text: string): string {
                     break;
                 }
 
-                if (findingLetterLetter?.trim().match(/[^\s\n\/]/)) {
+                if (findingLetterLetter?.trim().match(/[^\s/]/)) {
                     const sliced = text.slice(findingLetterIndex);
                     if (sliced.startsWith('PRETTIER_HTML_PLACEHOLDER_')) {
-                        const placeholder = safeMatch(sliced, /PRETTIER\w+\d+\w+\d+\w+?_JS/)[0];
+                        const placeholder = safeMatch(sliced, /PRETTIER.+?_JS/)[0];
                         if (!placeholder) {
                             throw new Error(
                                 `failed to extract the full prettier placeholder at index '${findingLetterIndex}' from: ${text}`,
@@ -68,7 +68,7 @@ function findClosingPlaceholder(text: string, startIndex: number): string {
 
     const sliced = text.slice(index + 2);
     if (sliced.startsWith('PRETTIER_HTML_PLACEHOLDER_')) {
-        const closingPlaceholder = safeMatch(sliced, /PRETTIER\w+\d+\w+\d+\w+?_JS/)[0];
+        const closingPlaceholder = safeMatch(sliced, /PRETTIER.+?_JS/)[0];
         if (!closingPlaceholder) {
             throw new Error(
                 `failed to extract the full prettier closing placeholder at index '${index}' from: ${text}`,

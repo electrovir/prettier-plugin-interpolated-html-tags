@@ -1,11 +1,12 @@
 import {mapObjectValues} from '@augment-vir/common';
 import type {Plugin} from 'prettier';
-import {parsers as htmlParsers} from 'prettier/parser-html';
-import {injectCustomPreprocessing} from './preprocessing/inject-preprocess';
+import {parsers as htmlParsers} from 'prettier/plugins/html';
+import {injectCustomPreprocessing} from './preprocessing/inject-preprocess.js';
 
 // export this so we can use it later to explicitly find this plugin
-export {pluginMarker} from './plugin-marker';
+export {pluginMarker} from './plugin-marker.js';
 
+/** The HTML parsers that support interpolated tag names. */
 export const parsers: Plugin['parsers'] = mapObjectValues(
     {
         html: htmlParsers.html,
@@ -14,7 +15,3 @@ export const parsers: Plugin['parsers'] = mapObjectValues(
         return injectCustomPreprocessing(parser);
     },
 );
-
-// export const printers: Plugin['printers'] = {
-//     html: interpolatedTagNamesPrinter,
-// };

@@ -1,11 +1,12 @@
+import {stringify} from '@augment-vir/common';
 import {Parser, ParserOptions, Plugin, Printer} from 'prettier';
 import {createWrappedMultiTargetProxy} from 'proxy-vir';
 import {SetOptional} from 'type-fest';
-import {debugLog} from '../debug';
-import {pluginMarker} from '../plugin-marker';
-import {createInterpolatedTagNamesPrinter} from '../printer/interpolated-tag-names-printer';
-import {setOriginalPrinter} from '../printer/original-printer';
-import {replaceTagNames} from './replace-interpolated-tag-names';
+import {debugLog} from '../debug.js';
+import {pluginMarker} from '../plugin-marker.js';
+import {createInterpolatedTagNamesPrinter} from '../printer/interpolated-tag-names-printer.js';
+import {setOriginalPrinter} from '../printer/original-printer.js';
+import {replaceTagNames} from './replace-interpolated-tag-names.js';
 
 /** Prettier's type definitions are not true. */
 type ActualParserOptions = SetOptional<ParserOptions, 'plugins'> &
@@ -39,7 +40,9 @@ export function injectInterpolatedHtmlTagsPrinter(options: ActualParserOptions):
         }
         const matchedPrinter = firstMatchedPlugin.printers?.[astFormat];
         if (!matchedPrinter) {
-            throw new Error(`Printer not found on matched plugin: ${firstMatchedPlugin}`);
+            throw new Error(
+                `Printer not found on matched plugin: ${stringify(firstMatchedPlugin)}`,
+            );
         }
         setOriginalPrinter(matchedPrinter);
         const thisPluginIndex = plugins.findIndex((plugin) => {

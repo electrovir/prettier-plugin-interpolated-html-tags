@@ -1,5 +1,5 @@
 import {Doc} from 'prettier';
-import {isVerbose, verboseLog} from '../debug';
+import {isVerbose, verboseLog} from '../debug.js';
 
 type Parents = {parent: Doc; childIndexInThisParent: number | undefined};
 

@@ -1,6 +1,7 @@
+import type {AnyObject} from '@augment-vir/common';
 import {AstPath, Doc} from 'prettier';
-import {ReplacementKey, clearReplacements, getReplacement} from '../replacement-map';
-import {walkDoc} from './walk-doc';
+import {ReplacementKey, clearReplacements, getReplacement} from '../replacement-map.js';
+import {walkDoc} from './walk-doc.js';
 
 type SpanLocation = {
     file: {content: string; url: string};
@@ -8,7 +9,8 @@ type SpanLocation = {
     line: number;
     offset: number;
 };
-type Span = {start: SpanLocation; end: SpanLocation; details: any | null};
+
+type Span = {start: SpanLocation; end: SpanLocation; details: any};
 
 type HtmlElementNode = {
     attrs?: any[];
@@ -30,7 +32,7 @@ type HtmlElementNode = {
     startSourceSpan: Span;
     tagDefinition?: {
         canSelfClose: boolean;
-        closedByChildren: {};
+        closedByChildren: AnyObject;
         closedByParent: boolean;
         contentType: number;
         ignoreFirstLf: boolean;
@@ -100,7 +102,7 @@ export function replaceHtmlTagPlaceholders(originalFormattedOutput: Doc, path: A
                             throw new Error(`Found opening tag but index is undefined`);
                         }
                         if (!Array.isArray(parentDoc)) {
-                            throw new Error(`Found opening tag but parentDoc is not an array`);
+                            throw new TypeError(`Found opening tag but parentDoc is not an array`);
                         }
                         parentDoc[index] = `<${replacementOpeningTagName}` as any;
                     }
@@ -113,7 +115,7 @@ export function replaceHtmlTagPlaceholders(originalFormattedOutput: Doc, path: A
                             throw new Error(`Found closing tag but index is undefined`);
                         }
                         if (!Array.isArray(parentDoc)) {
-                            throw new Error(`Found closing tag but parentDoc is not an array`);
+                            throw new TypeError(`Found closing tag but parentDoc is not an array`);
                         }
                         parentDoc[index] = `</${replacementClosingTagName}` as any;
                         clearReplacements(node.name as ReplacementKey);
