@@ -1,7 +1,6 @@
-import {stringify} from '@augment-vir/common';
-import {Parser, ParserOptions, Plugin, Printer} from 'prettier';
+import {type SetOptional, stringify} from '@augment-vir/common';
+import {type Parser, type ParserOptions, type Plugin, type Printer} from 'prettier';
 import {createWrappedMultiTargetProxy} from 'proxy-vir';
-import {SetOptional} from 'type-fest';
 import {debugLog} from '../debug.js';
 import {pluginMarker} from '../plugin-marker.js';
 import {createInterpolatedTagNamesPrinter} from '../printer/interpolated-tag-names-printer.js';
@@ -24,7 +23,7 @@ export function injectInterpolatedHtmlTagsPrinter(options: ActualParserOptions):
     } else {
         const astFormat = (options as any).astFormat;
         if (!astFormat) {
-            throw new Error(`Could not find astFormat while adding printer.`);
+            throw new Error('Could not find astFormat while adding printer.');
         }
         /**
          * If the printer hasn't already been assigned in options, rearrange plugins so that ours
@@ -33,7 +32,10 @@ export function injectInterpolatedHtmlTagsPrinter(options: ActualParserOptions):
         const plugins = options.plugins ?? [];
         const firstMatchedPlugin = plugins.find(
             (plugin): plugin is Plugin =>
-                typeof plugin !== 'string' && !!plugin.printers && !!plugin.printers[astFormat],
+                typeof plugin !== 'string' &&
+                !(plugin instanceof URL) &&
+                !!plugin.printers &&
+                !!plugin.printers[astFormat],
         );
         if (!firstMatchedPlugin || typeof firstMatchedPlugin === 'string') {
             throw new Error(`Matched invalid first plugin: ${firstMatchedPlugin}`);
@@ -50,7 +52,7 @@ export function injectInterpolatedHtmlTagsPrinter(options: ActualParserOptions):
         });
         const thisPlugin = plugins[thisPluginIndex];
         if (!thisPlugin) {
-            throw new Error(`This plugin was not found.`);
+            throw new Error('This plugin was not found.');
         }
         // remove this plugin from its current location in the array
         plugins.splice(thisPluginIndex, 1);
@@ -73,7 +75,9 @@ export function injectCustomPreprocessing(originalParser: Parser) {
 
     async function parseWithTagNames(text: string, options: ParserOptions) {
         const fixedText = replaceTagNames(text);
-        debugLog({fixedText});
+        debugLog({
+            fixedText,
+        });
         const originalOutput = await originalParser.parse(fixedText, options);
         return originalOutput;
     }

@@ -1,4 +1,4 @@
-import {Doc} from 'prettier';
+import {type Doc} from 'prettier';
 import {isVerbose, verboseLog} from '../debug.js';
 
 type Parents = {parent: Doc; childIndexInThisParent: number | undefined};
@@ -7,17 +7,21 @@ type Parents = {parent: Doc; childIndexInThisParent: number | undefined};
  * @returns Boolean true means keep walking children and siblings, false means stop walking children
  *   and siblings. Returning false does not stop walking of aunts/uncles or ancestors.
  */
-export function walkDoc(
-    startDoc: Doc,
-    /** Return something falsy to prevent walking of child docs */
+export function walkDoc({
+    startDoc,
+    callback,
+    parents = [],
+    index,
+}: Readonly<{
+    startDoc: Doc;
     callback: (
         currentDoc: Doc,
         parents: Parents[],
         index: number | undefined,
-    ) => boolean | void | undefined,
-    parents: Parents[] = [],
-    index: number | undefined = undefined,
-): boolean {
+    ) => boolean | void | undefined;
+    parents?: Parents[];
+    index?: number | undefined;
+}>): boolean {
     if (!startDoc) {
         return true;
     }
@@ -38,45 +42,51 @@ export function walkDoc(
     if (!callback(startDoc, parents, index)) {
         // if the callback returns something falsy, don't try to walk its children
         return false;
-    }
-    if (typeof startDoc === 'string') {
+    } else if (typeof startDoc === 'string') {
         return true;
     } else if (Array.isArray(startDoc)) {
         verboseLog('walking array children');
         // one a child returns false, abort walking this array
-        startDoc.every((innerDoc, index): boolean => {
-            return walkDoc(
-                innerDoc,
+        startDoc.every((innerDoc, innerIndex): boolean => {
+            return walkDoc({
+                startDoc: innerDoc,
                 callback,
-                [
-                    {parent: startDoc, childIndexInThisParent: index},
+                parents: [
+                    {
+                        parent: startDoc,
+                        childIndexInThisParent: innerIndex,
+                    },
                     ...parents,
                 ],
-                index,
-            );
+                index: innerIndex,
+            });
         });
     } else if ('contents' in startDoc) {
         verboseLog('walking contents property');
-        return walkDoc(
-            startDoc.contents,
+        return walkDoc({
+            startDoc: startDoc.contents,
             callback,
-            [
-                {parent: startDoc, childIndexInThisParent: undefined},
+            parents: [
+                {
+                    parent: startDoc,
+                    childIndexInThisParent: undefined,
+                },
                 ...parents,
             ],
-            undefined,
-        );
+        });
     } else if ('parts' in startDoc) {
         verboseLog('walking parts property');
-        return walkDoc(
-            startDoc.parts,
+        return walkDoc({
+            startDoc: startDoc.parts,
             callback,
-            [
-                {parent: startDoc, childIndexInThisParent: undefined},
+            parents: [
+                {
+                    parent: startDoc,
+                    childIndexInThisParent: undefined,
+                },
                 ...parents,
             ],
-            undefined,
-        );
+        });
     }
     return true;
 }

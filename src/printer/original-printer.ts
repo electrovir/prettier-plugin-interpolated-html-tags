@@ -1,4 +1,4 @@
-import {Printer} from 'prettier';
+import {type Printer} from 'prettier';
 
 let originalPrinter: Printer | undefined;
 
@@ -11,7 +11,7 @@ export function setOriginalPrinter(input: Printer) {
 
 export function getOriginalPrinter(): Printer {
     if (!originalPrinter) {
-        throw new Error(`originalPrinter hasn't been defined yet!`);
+        throw new Error("originalPrinter hasn't been defined yet!");
     }
     return originalPrinter;
 }

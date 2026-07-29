@@ -1,6 +1,6 @@
 import type {AnyObject} from '@augment-vir/common';
-import {AstPath, Doc} from 'prettier';
-import {ReplacementKey, clearReplacements, getReplacement} from '../replacement-map.js';
+import {type AstPath, type Doc} from 'prettier';
+import {type ReplacementKey, clearReplacements, getReplacement} from '../replacement-map.js';
 import {walkDoc} from './walk-doc.js';
 
 type SpanLocation = {
@@ -93,35 +93,39 @@ export function replaceHtmlTagPlaceholders(originalFormattedOutput: Doc, path: A
     if (node.type === 'element') {
         const replacementOpeningTagName = getReplacement(node.name as ReplacementKey, 'open');
         if (replacementOpeningTagName) {
-            walkDoc(originalFormattedOutput, (currentDoc, parentDocs, index) => {
-                const currentParent = parentDocs[0];
-                const parentDoc = currentParent?.parent;
-                if (typeof currentDoc === 'string') {
-                    if (currentDoc === `<${node.name}`) {
-                        if (index == undefined) {
-                            throw new Error(`Found opening tag but index is undefined`);
+            walkDoc({
+                startDoc: originalFormattedOutput,
+                callback(currentDoc, parentDocs, index) {
+                    const parentDoc = parentDocs[0]?.parent;
+                    if (typeof currentDoc === 'string') {
+                        if (currentDoc === `<${node.name}`) {
+                            if (index == undefined) {
+                                throw new Error('Found opening tag but index is undefined');
+                            } else if (!Array.isArray(parentDoc)) {
+                                throw new TypeError(
+                                    'Found opening tag but parentDoc is not an array',
+                                );
+                            }
+                            parentDoc[index] = `<${replacementOpeningTagName}` as any;
                         }
-                        if (!Array.isArray(parentDoc)) {
-                            throw new TypeError(`Found opening tag but parentDoc is not an array`);
+                        if (currentDoc === `</${node.name}`) {
+                            const replacementClosingTagName = getReplacement(
+                                node.name as ReplacementKey,
+                                'close',
+                            );
+                            if (index == undefined) {
+                                throw new Error('Found closing tag but index is undefined');
+                            } else if (!Array.isArray(parentDoc)) {
+                                throw new TypeError(
+                                    'Found closing tag but parentDoc is not an array',
+                                );
+                            }
+                            parentDoc[index] = `</${replacementClosingTagName}` as any;
+                            clearReplacements(node.name as ReplacementKey);
                         }
-                        parentDoc[index] = `<${replacementOpeningTagName}` as any;
                     }
-                    if (currentDoc === `</${node.name}`) {
-                        const replacementClosingTagName = getReplacement(
-                            node.name as ReplacementKey,
-                            'close',
-                        );
-                        if (index == undefined) {
-                            throw new Error(`Found closing tag but index is undefined`);
-                        }
-                        if (!Array.isArray(parentDoc)) {
-                            throw new TypeError(`Found closing tag but parentDoc is not an array`);
-                        }
-                        parentDoc[index] = `</${replacementClosingTagName}` as any;
-                        clearReplacements(node.name as ReplacementKey);
-                    }
-                }
-                return true;
+                    return true;
+                },
             });
         }
     }

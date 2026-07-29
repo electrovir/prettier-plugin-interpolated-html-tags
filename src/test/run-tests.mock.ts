@@ -3,13 +3,8 @@ import {format} from 'prettier';
 import {repoConfig} from './prettier-config.js';
 
 function removeIndent(input: string): string {
-    return (
-        input
-            .replace(/^\s*\n\s*/, '')
-            .replace(/\n {12}/g, '\n')
-            // eslint-disable-next-line sonarjs/slow-regex
-            .replace(/\n\s+$/, '\n')
-    );
+    const unindented = input.replace(/^\s*\n\s*/, '').replace(/\n {12}/g, '\n');
+    return `${unindented.trimEnd()}\n`;
 }
 
 export type TestCase = {code: string; expect?: string};

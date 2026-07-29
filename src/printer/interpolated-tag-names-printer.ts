@@ -1,5 +1,5 @@
 import type {AnyFunction} from '@augment-vir/common';
-import {AstPath, ParserOptions, Printer} from 'prettier';
+import {type AstPath, type ParserOptions, type Printer} from 'prettier';
 import {getOriginalPrinter} from './original-printer.js';
 import {replaceHtmlTagPlaceholders} from './replace-html-tag-placeholders.js';
 
@@ -21,12 +21,9 @@ function wrapInOriginalPrinterCall<T extends string = string>(
 
             return replaceHtmlTagPlaceholders(originalOutput, path);
         } else {
-            let thisParent: any = originalPrinter;
-            let printerProp = originalPrinter[property];
-            if (subProperty) {
-                thisParent = printerProp;
-                printerProp = (printerProp as any)[subProperty];
-            }
+            const topLevelProp: any = Reflect.get(originalPrinter, property);
+            const thisParent: any = subProperty ? topLevelProp : originalPrinter;
+            const printerProp = subProperty ? topLevelProp?.[subProperty] : topLevelProp;
             try {
                 return (printerProp as AnyFunction | undefined)?.apply(thisParent, args);
             } catch (error) {
